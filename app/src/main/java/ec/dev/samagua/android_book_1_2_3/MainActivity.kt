@@ -2,6 +2,7 @@ package ec.dev.samagua.android_book_1_2_3
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -23,6 +24,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -36,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import ec.dev.samagua.android_book_1_2_3.ui.theme.Androidbook123Theme
+import java.util.UUID
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,6 +70,8 @@ fun SaveRestoreScreen(modifier: Modifier = Modifier) {
     var email by rememberSaveable { mutableStateOf("") }
     var discountCodeConfirmation by rememberSaveable { mutableStateOf("") }
     var discountCode by rememberSaveable { mutableStateOf("") }
+    val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
 
     ConstraintLayout(
         modifier = modifier
@@ -150,6 +156,20 @@ fun SaveRestoreScreen(modifier: Modifier = Modifier) {
 
         Button(
             onClick = {
+                val tmp1 = firstName.trim();
+                val tmp2 = lastName.trim();
+                val tmp3 = email.trim();
+
+                if (tmp1.isNotBlank() && tmp2.isNotBlank() && tmp3.isNotBlank()) {
+                    val fullName = firstName.plus(" ").plus(lastName)
+                    discountCodeConfirmation = context.getString(R.string.discount_code_confirmation, fullName)
+                    discountCode = UUID.randomUUID().toString().take(8).uppercase()
+                    focusManager.clearFocus()
+
+                }else {
+                    Toast.makeText(context, R.string.add_text_validation, Toast.LENGTH_SHORT).show()
+                }
+
 
             },
             colors = ButtonDefaults.buttonColors(
