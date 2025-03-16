@@ -17,10 +17,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -47,16 +52,18 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SaveRestoreScreen(modifier: Modifier = Modifier) {
-    var firstName by remember { mutableStateOf("") }
-    var lastName by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var discountCodeConfirmation by remember { mutableStateOf("") }
-    var discountCode by remember { mutableStateOf("") }
+    var firstName by rememberSaveable { mutableStateOf("") }
+    var lastName by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+    var discountCodeConfirmation by rememberSaveable { mutableStateOf("") }
+    var discountCode by rememberSaveable { mutableStateOf("") }
 
     ConstraintLayout(
         modifier = modifier
+            .semantics { testTagsAsResourceId = true }
             .fillMaxWidth()
             .padding(4.dp)
     ) {
@@ -82,6 +89,7 @@ fun SaveRestoreScreen(modifier: Modifier = Modifier) {
             onValueChange = { firstName = it },
             label = { Text(text = stringResource(R.string.first_name_label)) },
             modifier = Modifier
+                .testTag("firstNameId")
                 .padding(start = 24.dp)
                 .constrainAs(firstNameField) {
                     start.linkTo(parent.start)
@@ -101,6 +109,7 @@ fun SaveRestoreScreen(modifier: Modifier = Modifier) {
             onValueChange = { lastName = it },
             label = { Text(text = stringResource(R.string.last_name_label)) },
             modifier = Modifier
+                .testTag("lastNameId")
                 .padding(end = 24.dp)
                 .constrainAs(lastNameField) {
                     start.linkTo(guideline)
@@ -119,6 +128,7 @@ fun SaveRestoreScreen(modifier: Modifier = Modifier) {
             onValueChange = { email = it },
             label = { Text(text = stringResource(R.string.email_label)) },
             modifier = Modifier
+                .testTag("emailId")
                 .padding(top = 16.dp, start = 24.dp, end = 24.dp)
                 .fillMaxWidth()
                 .constrainAs(emailField) {
@@ -193,7 +203,7 @@ fun SaveRestoreScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun SaveRestoreScreenPreview() {
-    Androidbook122Theme {
+    Androidbook123Theme {
         SaveRestoreScreen()
     }
 }
