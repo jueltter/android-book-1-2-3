@@ -57,8 +57,20 @@ class MainActivity : ComponentActivity() {
         Log.d(TAG, "onCreate")
     }
 
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        Log.d(TAG, "onRestoreInstanceState")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Log.d(TAG, "onSaveInstanceState")
+    }
+
     companion object {
         const val TAG = "SaveRestoreScreen"
+        private const val DISCOUNT_CONFIRMATION_MESSAGE = "DISCOUNT_CONFIRMATION_MESSAGE"
+        private const val DISCOUNT_CODE = "DISCOUNT_CODE"
     }
 }
 
